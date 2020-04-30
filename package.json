@@ -1,0 +1,503 @@
+{
+  "name": "onboardtour",
+  "displayName": "onboardtour",
+  "description": "VS Code extension that allows you to record and playback guided tours of codebases, directly within the editor",
+  "publisher": "vsls-contrib",
+  "version": "0.0.23",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/vsls-contrib/onboardtour"
+  },
+  "bugs": {
+    "url": "https://github.com/vsls-contrib/onboardtour/issues"
+  },
+  "homepage": "https://github.com/vsls-contrib/onboardtour#readme",
+  "license": "ISC",
+  "icon": "images/icon.png",
+  "engines": {
+    "vscode": "^1.40.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "keywords": [
+    "Collaboration",
+    "Sharing"
+  ],
+  "extensionKind": [
+    "workspace",
+    "ui"
+  ],
+  "activationEvents": [
+    "*",
+    "onNotebookEditor:onboardtour"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "configuration": {
+      "type": "object",
+      "title": "onboardtour",
+      "properties": {
+        "onboardtour.showMarkers": {
+          "type": "boolean",
+          "default": true,
+          "description": "Specifies whether or not to show tour markers in the editor gutter."
+        }
+      }
+    },
+    "commands": [
+      {
+        "command": "onboardtour.addTourStep",
+        "title": "Add Step to Tour",
+        "enablement": "!commentIsEmpty"
+      },
+      {
+        "command": "onboardtour.changeTourDescription",
+        "title": "Change Description"
+      },
+      {
+        "command": "onboardtour.changeTourRef",
+        "title": "Change Git Ref"
+      },
+      {
+        "command": "onboardtour.changeTourTitle",
+        "title": "Change Title"
+      },
+      {
+        "command": "onboardtour.deleteTourStep",
+        "title": "Delete Step"
+      },
+      {
+        "command": "onboardtour.deleteTour",
+        "title": "Delete Tour"
+      },
+      {
+        "command": "onboardtour.editTourAtStep",
+        "title": "Edit Step"
+      },
+      {
+        "command": "onboardtour.editTourStep",
+        "title": "Edit Step"
+      },
+      {
+        "command": "onboardtour.editTour",
+        "title": "Edit Tour",
+        "category": "onboardtour",
+        "icon": "$(edit)"
+      },
+      {
+        "command": "onboardtour.endTour",
+        "title": "End Tour",
+        "category": "onboardtour",
+        "icon": "$(debug-stop)"
+      },
+      {
+        "command": "onboardtour.exportTour",
+        "title": "Export Tour..."
+      },
+      {
+        "command": "onboardtour.hideMarkers",
+        "title": "Hide Tour Markers",
+        "category": "onboardtour",
+        "icon": "$(eye-closed)"
+      },
+      {
+        "command": "onboardtour.moveTourStepForward",
+        "title": "Move Down",
+        "icon": "$(arrow-down)"
+      },
+      {
+        "command": "onboardtour.moveTourStepBack",
+        "title": "Move Up",
+        "icon": "$(arrow-up)"
+      },
+      {
+        "command": "onboardtour.nextTourStep",
+        "title": "Next",
+        "icon": "$(arrow-right)"
+      },
+      {
+        "command": "onboardtour.openTourFile",
+        "title": "Open Tour File...",
+        "icon": "$(folder-opened)",
+        "category": "onboardtour"
+      },
+      {
+        "command": "onboardtour.openTourUrl",
+        "title": "Open Tour URL...",
+        "category": "onboardtour"
+      },
+      {
+        "command": "onboardtour.previousTourStep",
+        "title": "Previous",
+        "icon": "$(arrow-left)"
+      },
+      {
+        "command": "onboardtour.recordTour",
+        "title": "Record Tour",
+        "category": "onboardtour",
+        "icon": "$(add)"
+      },
+      {
+        "command": "onboardtour.refreshTours",
+        "title": "Refresh Tours",
+        "category": "onboardtour"
+      },
+      {
+        "command": "onboardtour.resumeTour",
+        "title": "Resume Tour",
+        "category": "onboardtour"
+      },
+      {
+        "command": "onboardtour.saveTourStep",
+        "title": "Save Step"
+      },
+      {
+        "command": "onboardtour.showMarkers",
+        "title": "Show Tour Markers",
+        "category": "onboardtour",
+        "icon": "$(eye)"
+      },
+      {
+        "command": "onboardtour.startTour",
+        "title": "Start Tour",
+        "category": "onboardtour",
+        "icon": "$(debug-start)"
+      },
+      {
+        "command": "onboardtour.viewNotebook",
+        "title": "View Notebook",
+        "category": "onboardtour"
+      }
+    ],
+    "menus": {
+      "commandPalette": [
+        {
+          "command": "onboardtour.editTour",
+          "when": "onboardtour:inTour && !onboardtour:recording && onboardtour:canEditTour"
+        },
+        {
+          "command": "onboardtour.endTour",
+          "when": "onboardtour:inTour"
+        },
+        {
+          "command": "onboardtour.hideMarkers",
+          "when": "onboardtour:hasTours && onboardtour:showingMarkers"
+        },
+        {
+          "command": "onboardtour.refreshTours",
+          "when": "onboardtour:hasTours"
+        },
+        {
+          "command": "onboardtour.resumeTour",
+          "when": "onboardtour:inTour"
+        },
+        {
+          "command": "onboardtour.showMarkers",
+          "when": "onboardtour:hasTours && !onboardtour:showingMarkers"
+        },
+        {
+          "command": "onboardtour.startTour",
+          "when": "onboardtour:hasTours"
+        },
+        {
+          "command": "onboardtour.addTourStep",
+          "when": "false"
+        },
+        {
+          "command": "onboardtour.changeTourRef",
+          "when": "false"
+        },
+        {
+          "command": "onboardtour.changeTourTitle",
+          "when": "false"
+        },
+        {
+          "command": "onboardtour.changeTourDescription",
+          "when": "false"
+        },
+        {
+          "command": "onboardtour.deleteTour",
+          "when": "false"
+        },
+        {
+          "command": "onboardtour.deleteTourStep",
+          "when": "false"
+        },
+        {
+          "command": "onboardtour.editTourAtStep",
+          "when": "false"
+        },
+        {
+          "command": "onboardtour.editTourStep",
+          "when": "false"
+        },
+        {
+          "command": "onboardtour.exportTour",
+          "when": "false"
+        },
+        {
+          "command": "onboardtour.nextTourStep",
+          "when": "false"
+        },
+        {
+          "command": "onboardtour.previousTourStep",
+          "when": "false"
+        },
+        {
+          "command": "onboardtour.saveTourStep",
+          "when": "false"
+        },
+        {
+          "command": "onboardtour.viewNotebook",
+          "when": "false"
+        }
+      ],
+      "comments/commentThread/title": [
+        {
+          "command": "onboardtour.previousTourStep",
+          "group": "inline@1",
+          "when": "commentController == onboardtour && commentThread =~ /hasPrevious/"
+        },
+        {
+          "command": "onboardtour.nextTourStep",
+          "group": "inline@2",
+          "when": "commentController == onboardtour && commentThread =~ /hasNext/"
+        },
+        {
+          "command": "onboardtour.endTour",
+          "group": "inline@3",
+          "when": "commentController == onboardtour"
+        },
+        {
+          "command": "onboardtour.editTour",
+          "group": "inline@4",
+          "when": "commentController == onboardtour && !onboardtour:recording && onboardtour:canEditTour"
+        }
+      ],
+      "comments/commentThread/context": [
+        {
+          "command": "onboardtour.addTourStep",
+          "group": "inline",
+          "when": "commentController == onboardtour && commentThreadIsEmpty"
+        }
+      ],
+      "comments/comment/title": [
+        {
+          "command": "onboardtour.moveTourStepBack",
+          "group": "move@1",
+          "when": "commentController == onboardtour && onboardtour:recording && commentThread =~ /hasPrevious/"
+        },
+        {
+          "command": "onboardtour.moveTourStepForward",
+          "group": "move@2",
+          "when": "commentController == onboardtour && onboardtour:recording && commentThread =~ /hasNext/"
+        },
+        {
+          "command": "onboardtour.editTourStep",
+          "group": "mutate@1",
+          "when": "commentController == onboardtour && onboardtour:recording"
+        },
+        {
+          "command": "onboardtour.deleteTourStep",
+          "group": "mutate@2",
+          "when": "commentController == onboardtour && onboardtour:recording"
+        }
+      ],
+      "comments/comment/context": [
+        {
+          "command": "onboardtour.saveTourStep",
+          "group": "inline@2",
+          "when": "commentController == onboardtour && onboardtour:recording"
+        }
+      ],
+      "view/title": [
+        {
+          "command": "onboardtour.hideMarkers",
+          "when": "view == onboardtour.tours && onboardtour:showingMarkers",
+          "group": "navigation@1"
+        },
+        {
+          "command": "onboardtour.showMarkers",
+          "when": "view == onboardtour.tours && !onboardtour:showingMarkers",
+          "group": "navigation@1"
+        },
+        {
+          "command": "onboardtour.openTourFile",
+          "when": "view == onboardtour.tours",
+          "group": "navigation@2"
+        },
+        {
+          "command": "onboardtour.recordTour",
+          "when": "view == onboardtour.tours",
+          "group": "navigation@3"
+        }
+      ],
+      "view/item/context": [
+        {
+          "command": "onboardtour.endTour",
+          "when": "viewItem =~ /onboardtour.tour(.recording)?.active/",
+          "group": "inline@1"
+        },
+        {
+          "command": "onboardtour.startTour",
+          "when": "viewItem == onboardtour.tour",
+          "group": "inline@2"
+        },
+        {
+          "command": "onboardtour.resumeTour",
+          "when": "viewItem =~ /onboardtour.tour(.recording)?.active$/",
+          "group": "active@1"
+        },
+        {
+          "command": "onboardtour.endTour",
+          "when": "viewItem =~ /onboardtour.tour(.recording)?.active$/",
+          "group": "active@2"
+        },
+        {
+          "command": "onboardtour.startTour",
+          "when": "viewItem == onboardtour.tour",
+          "group": "basic@1"
+        },
+        {
+          "command": "onboardtour.viewNotebook",
+          "when": "viewItem == onboardtour.tour",
+          "group": "basic@2"
+        },
+        {
+          "command": "onboardtour.changeTourTitle",
+          "when": "viewItem =~ /^onboardtour.tour(.recording)?(.active)?$/",
+          "group": "change@1"
+        },
+        {
+          "command": "onboardtour.changeTourDescription",
+          "when": "viewItem =~ /^onboardtour.tour(.recording)?(.active)?$/",
+          "group": "change@2"
+        },
+        {
+          "command": "onboardtour.changeTourRef",
+          "when": "viewItem =~ /^onboardtour.tour(.recording)?(.active)?$/ && gitOpenRepositoryCount != 0",
+          "group": "change@3"
+        },
+        {
+          "command": "onboardtour.editTour",
+          "when": "viewItem =~ /^onboardtour.tour(.active)?$/",
+          "group": "edit@1"
+        },
+        {
+          "command": "onboardtour.deleteTour",
+          "when": "viewItem =~ /^onboardtour.tour(.recording)?(.active)?$/",
+          "group": "edit@2"
+        },
+        {
+          "command": "onboardtour.exportTour",
+          "when": "viewItem =~ /^onboardtour.tour(.active)?$/",
+          "group": "export@1"
+        },
+        {
+          "command": "onboardtour.moveTourStepBack",
+          "when": "viewItem =~ /^onboardtour.tourStep.hasPrevious/ && onboardtour:recording",
+          "group": "inline@1"
+        },
+        {
+          "command": "onboardtour.moveTourStepForward",
+          "when": "viewItem =~ /onboardtour.tourStep.*(.hasNext)/ && onboardtour:recording",
+          "group": "inline@2"
+        },
+        {
+          "command": "onboardtour.moveTourStepBack",
+          "when": "viewItem =~ /^onboardtour.tourStep.hasPrevious/ && onboardtour:recording",
+          "group": "basic@1"
+        },
+        {
+          "command": "onboardtour.moveTourStepForward",
+          "when": "viewItem =~ /onboardtour.tourStep.*(.hasNext)/ && onboardtour:recording",
+          "group": "basic@2"
+        },
+        {
+          "command": "onboardtour.editTourAtStep",
+          "when": "viewItem =~ /^onboardtour.tourStep/ && !onboardtour:recording",
+          "group": "manage@1"
+        },
+        {
+          "command": "onboardtour.deleteTourStep",
+          "when": "viewItem =~ /^onboardtour.tourStep/",
+          "group": "manage@2"
+        }
+      ]
+    },
+    "views": {
+      "explorer": [
+        {
+          "id": "onboardtour.tours",
+          "name": "onboardtour",
+          "when": "onboardtour:hasTours || onboardtour:inTour"
+        }
+      ]
+    },
+    "jsonValidation": [
+      {
+        "fileMatch": "*.tour",
+        "url": "https://cdn.jsdelivr.net/gh/vsls-contrib/code-tour/schema.json"
+      }
+    ],
+    "keybindings": [
+      {
+        "command": "onboardtour.previousTourStep",
+        "when": "onboardtour:inTour && !textInputFocus && !terminalFocus",
+        "key": "ctrl+left",
+        "mac": "cmd+left"
+      },
+      {
+        "command": "onboardtour.nextTourStep",
+        "when": "onboardtour:inTour && !textInputFocus && !terminalFocus",
+        "key": "ctrl+right",
+        "mac": "cmd+right"
+      }
+    ],
+    "languages": [
+      {
+        "id": "json",
+        "extensions": [
+          ".tour"
+        ],
+        "aliases": [
+          "onboardtour"
+        ]
+      }
+    ],
+    "notebookProvider": [
+      {
+        "viewType": "onboardtour",
+        "displayName": "onboardtour Notebook",
+        "selector": [
+          {
+            "filenamePattern": "*.tour"
+          }
+        ]
+      }
+    ]
+  },
+  "dependencies": {
+    "axios": "^0.19.2",
+    "mobx": "^5.14.2"
+  },
+  "devDependencies": {
+    "@types/node": "^8.10.25",
+    "tslint": "^5.8.0",
+    "typescript": "^3.1.4",
+    "vsce": "^1.75.0",
+    "vscode": "^1.1.25"
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "postinstall": "node ./node_modules/vscode/bin/install",
+    "package": "vsce package"
+  },
+  "prettier": {
+    "arrowParens": "avoid",
+    "trailingComma": "none"
+  }
+}
