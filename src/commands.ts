@@ -1,5 +1,5 @@
-import { comparer, runInAction, when } from "mobx";
-import * as path from "path";
+import { comparer, runInAction } from "mobx";
+// import * as path from "path";
 import * as vscode from "vscode";
 import { workspace } from "vscode";
 import { EXTENSION_NAME } from "./constants";
@@ -11,16 +11,16 @@ import {
   moveCurrentonboardtourBackward,
   moveCurrentonboardtourForward,
   startonboardtour,
-  exportTour
+  // exportTour
 } from "./store/actions";
-import { discoverTours } from "./store/provider";
+// import { discoverTours } from "./store/provider";
 import { onboardtourNode, onboardtourStepNode } from "./tree/nodes";
-import { getActiveWorkspacePath } from "./utils";
+// import { getActiveWorkspacePath } from "./utils";
 interface onboardtourQuickPickItem extends vscode.QuickPickItem {
   tour: onboardtour;
 }
 
-let terminal: vscode.Terminal | null;
+// let terminal: vscode.Terminal | null;
 export function registerCommands() {
   // This is a "private" command that's used exclusively
   // by the hover description for tour markers.
@@ -117,7 +117,7 @@ export function registerCommands() {
     uri: vscode.Uri;
   }
 
-  const REENTER_TITLE_RESPONSE = "Re-enter title";
+  // const REENTER_TITLE_RESPONSE = "Re-enter title";
   vscode.commands.registerCommand(
     `${EXTENSION_NAME}.recordTour`,
     async (placeHolderTitle?: string) => {
@@ -267,22 +267,22 @@ export function registerCommands() {
     return vscode.workspace.fs.writeFile(uri, new Buffer(tourContent));
   }
 
-  async function updateTourProperty(tour: onboardtour, property: string) {
-    const propertyValue = await vscode.window.showInputBox({
-      prompt: `Enter the ${property} for this tour`,
-      // @ts-ignore
-      value: tour[property]
-    });
+  // async function updateTourProperty(tour: onboardtour, property: string) {
+  //   const propertyValue = await vscode.window.showInputBox({
+  //     prompt: `Enter the ${property} for this tour`,
+  //     // @ts-ignore
+  //     value: tour[property]
+  //   });
 
-    if (!propertyValue) {
-      return;
-    }
+  //   if (!propertyValue) {
+  //     return;
+  //   }
 
-    // @ts-ignore
-    tour[property] = propertyValue;
+  //   // @ts-ignore
+  //   tour[property] = propertyValue;
 
-    saveTour(tour);
-  }
+  //   saveTour(tour);
+  // }
 
   function moveStep(
     movement: number,

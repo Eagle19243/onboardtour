@@ -10,7 +10,6 @@ import {
   MarkdownString,
   Range,
   Selection,
-  TextDocument,
   TextEditorRevealType,
   Uri,
   window

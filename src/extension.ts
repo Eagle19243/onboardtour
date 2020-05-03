@@ -7,7 +7,8 @@ import {
   endCurrentonboardtour,
   promptForTour,
   startonboardtour,
-  exportTour
+  exportTour,
+  startExampleTour
 } from "./store/actions";
 import { discoverTours } from "./store/provider";
 import { registerTreeProvider } from "./tree";
@@ -46,7 +47,8 @@ export async function activate(context: vscode.ExtensionContext) {
   registerTreeProvider(context.extensionPath);
   registerFileSystemProvider();
   registerStatusBar();
-
+  startExampleTour(context.extensionPath);
+  
   return {
     startTour: startonboardtour,
     exportTour,

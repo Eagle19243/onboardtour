@@ -1,0 +1,15 @@
+{
+  "title": "ExampleTour",
+  "steps": [
+    {
+      "file": "test.html",
+      "line": 4,
+      "description": "ExampleStep1: page title"
+    },
+    {
+      "file": "test.html",
+      "line": 6,
+      "description": "ExampleStep2: show alert with string"
+    }
+  ]
+}
